@@ -1,19 +1,24 @@
 {
-	"name": "ADS1118 library",
+	"name": "ADS1018 library",
 	"version": "1.0.3",
 	"frameworks": "Arduino",
 	"license": "MIT",
-	"keywords": "ADS1118, SPI, ADC, 16-BIT",
-	"description": "Arduino library for TI ADS1118 (16-Bit Analog-to-Digital Converter with Internal Reference and Temperature Sensor).",
-	"downloadUrl": "https://github.com/denkitronik/ADS1118/archive/master.zip",
-	"authors":
+	"keywords": "ADS1018, SPI, ADC, 12-BIT",
+	"description": "Arduino library for TI ADS1018 (12-Bit Analog-to-Digital Converter with Internal Reference and Temperature Sensor).",
+	"downloadUrl": "https://github.com/xistoso/ADS1018/archive/master.zip",
+	"authors":[
 		{
 	        "name": "Alvaro Salazar <alvaro@denkitronik.com>",
-	        "maintainer": true
+	        "maintainer": false
 		},
+		{
+	        "name": "Pedro Dias <quitoso@gmail.com>",
+	        "maintainer": true
+		}
+	],
 	"repository":
 		{
 		    "type": "git",
-		    "url": "https://github.com/denkitronik/ADS1118" 
+		    "url": "https://github.com/xistoso/ADS1018" 
 		}
 }

@@ -1,5 +1,5 @@
-#ifndef ADS1118_h
-#define ADS1118_h
+#ifndef ADS1018_h
+#define ADS1018_h
 
 #include "Arduino.h"
 #include <SPI.h>
@@ -11,7 +11,7 @@
 */
 ///Union configuration register
 union Config {
-	///Structure of the config register of the ADS1118. (See datasheet [1])
+	///Structure of the config register of the ADS1018. (See datasheet [1])
 	struct {					
 		uint8_t reserved:1;    	///< "Reserved" bit
 		uint8_t noOperation:2; 	///< "NOP" bits
@@ -32,19 +32,19 @@ union Config {
 
 
 /**
- * Class representing the ADS1118 sensor chip
+ * Class representing the ADS1018 sensor chip
  * @author Alvaro Salazar <alvaro@denkitronik.com>
  */
-class ADS1118 {
+class ADS1018 {
     public:
         void begin();				///< This method initialize the SPI port and the config register
 #if defined(__AVR__)
-        ADS1118(uint8_t io_pin_cs);         ///< Constructor
+        ADS1018(uint8_t io_pin_cs);         ///< Constructor
 #elif defined(ESP32)
-        ADS1118(uint8_t io_pin_cs, SPIClass *spi = &SPI); 		///< Constructor
+        ADS1018(uint8_t io_pin_cs, SPIClass *spi = &SPI); 		///< Constructor
 	void begin(uint8_t sclk, uint8_t miso, uint8_t mosi);	///< This method initialize the SPI port and the config register        
 #endif
-	double getTemperature();			///< Getting the temperature in degrees celsius from the internal sensor of the ADS1118
+	double getTemperature();			///< Getting the temperature in degrees celsius from the internal sensor of the ADS1018
         uint16_t getADCValue(uint8_t inputs);					///< Getting a sample from the specified input
 	bool getADCValueNoWait(uint8_t pin_drdy, uint16_t &value);
 	bool getMilliVoltsNoWait(uint8_t pin_drdy, double &volts); ///< Getting the millivolts from the settled inputs
@@ -60,19 +60,19 @@ class ADS1118 {
 	void setInputSelected(uint8_t input);///< Setting the inputs to be adquired in the config register.
 	//Input multiplexer configuration selection for bits "MUX"
 	//Differential inputs
-        const uint8_t DIFF_0_1 	  = 0b000; 	///< Differential input: Vin=A0-A1
+    const uint8_t DIFF_0_1 	  = 0b000; 	///< Differential input: Vin=A0-A1
 	const uint8_t DIFF_0_3 	  = 0b001; 	///< Differential input: Vin=A0-A3
 	const uint8_t DIFF_1_3 	  = 0b010; 	///< Differential input: Vin=A1-A3
-        const uint8_t DIFF_2_3 	  = 0b011; 	///< Differential input: Vin=A2-A3   
+    const uint8_t DIFF_2_3 	  = 0b011; 	///< Differential input: Vin=A2-A3   
 	//Single ended inputs
-        const uint8_t AIN_0 	  = 0b100;  ///< Single ended input: Vin=A0
-        const uint8_t AIN_1		  = 0b101;	///< Single ended input: Vin=A1
-        const uint8_t AIN_2 	  = 0b110;	///< Single ended input: Vin=A2
-        const uint8_t AIN_3 	  = 0b111;	///< Single ended input: Vin=A3
-        union Config configRegister;        ///< Config register
+    const uint8_t AIN_0 	  = 0b100;  ///< Single ended input: Vin=A0
+    const uint8_t AIN_1		  = 0b101;	///< Single ended input: Vin=A1
+    const uint8_t AIN_2 	  = 0b110;	///< Single ended input: Vin=A2
+    const uint8_t AIN_3 	  = 0b111;	///< Single ended input: Vin=A3
+    union Config configRegister;        ///< Config register
 
-        //Bit constants
-	const uint32_t SCLK       = 2000000;///< ADS1118 SCLK frequency: 4000000 Hz Maximum for ADS1118
+    //Bit constants
+	const uint32_t SCLK       = 2000000;///< ADS1018 SCLK frequency: 4000000 Hz Maximum for ADS1018
 		
 	// Used by "SS" bit
 	const uint8_t START_NOW   = 1;      ///< Start of conversion in single-shot mode
@@ -107,14 +107,13 @@ class ADS1118 {
 
         /*Sampling rate selection by "DR" bits. 
 		[Warning: this could increase the noise and the effective number of bits (ENOB). See tables above]*/
-        const uint8_t RATE_8SPS   = 0b000;  ///< 8 samples/s, Tconv=125ms
-        const uint8_t RATE_16SPS  = 0b001;  ///< 16 samples/s, Tconv=62.5ms
-        const uint8_t RATE_32SPS  = 0b010;  ///< 32 samples/s, Tconv=31.25ms
-        const uint8_t RATE_64SPS  = 0b011;  ///< 64 samples/s, Tconv=15.625ms
-        const uint8_t RATE_128SPS = 0b100;  ///< 128 samples/s, Tconv=7.8125ms
-        const uint8_t RATE_250SPS = 0b101;  ///< 250 samples/s, Tconv=4ms
-        const uint8_t RATE_475SPS = 0b110;  ///< 475 samples/s, Tconv=2.105ms
-        const uint8_t RATE_860SPS = 0b111;  ///< 860 samples/s, Tconv=1.163ms	
+		const uint8_t RATE_128SPS = 0b000;  ///< 128 samples/s, Tconv=7.8125ms
+        const uint8_t RATE_250SPS = 0b001;  ///< 250 samples/s, Tconv=4ms
+        const uint8_t RATE_490SPS  = 0b010;  ///< 490 samples/s, Tconv=2.04ms
+        const uint8_t RATE_920SPS  = 0b011;  ///< 64 samples/s, Tconv=1.09ms
+        const uint8_t RATE_1600SPS = 0b100;  ///< 128 samples/s, Tconv= less than 1ms (Default)
+        const uint8_t RATE_2400SPS = 0b101;  ///< 250 samples/s, Tconv= less than 1ms
+        const uint8_t RATE_3300SPS = 0b110;  ///< 475 samples/s, Tconv= less than 1ms
 		
 private:
 #if defined(ESP32)
@@ -123,7 +122,7 @@ private:
 	uint8_t lastSensorMode=3;			///< Last sensor mode selected (ADC_MODE or TEMP_MODE or none)
         uint8_t cs;                         ///< Chip select pin (choose one)		
 	const float pgaFSR[8] = {6.144, 4.096, 2.048, 1.024, 0.512, 0.256, 0.256, 0.256};
-	const uint8_t CONV_TIME[8]={125, 63, 32, 16, 8, 4, 3, 2}; 	///< Array containing the conversions time in ms
+	const uint8_t CONV_TIME[8]={8, 4, 3, 2, 1, 1, 1}; 	///< Array containing the conversions time in ms
 
 /*
 							Table 1. Noise in μVRMS (μVPP) at VDD = 3.3 V   [1]
@@ -152,8 +151,8 @@ private:
 	860 	16 (14.8) 	16 (14.9) 	 16 (15.07) 	16 (14.95) 		16 (14.61) 		16 (13.8)
 	
 	
-	[1] Texas Instruments, "ADS1118 Ultrasmall, Low-Power, SPI™-Compatible, 16-Bit Analog-to-Digital 
-	Converter with Internal Reference and Temperature Sensor", ADS1118 datasheet, SBAS457E [OCTOBER 2010–REVISED OCTOBER 2015]. 
+	[1] Texas Instruments, "ADS1018 Ultrasmall, Low-Power, SPI™-Compatible, 16-Bit Analog-to-Digital 
+	Converter with Internal Reference and Temperature Sensor", ADS1018 datasheet, SBAS457E [OCTOBER 2010–REVISED OCTOBER 2015]. 
 	
 	Note: This information is taken from http://www.ti.com
 	      Copyright © 2010–2015, Texas Instruments Incorporated
